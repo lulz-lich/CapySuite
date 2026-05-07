@@ -1,0 +1,176 @@
+{
+  "id": "eng-sample-green-harbor",
+  "name": "Authorized Web Platform Assessment",
+  "client": "Northstar Financial Labs",
+  "codename": "GREEN HARBOR",
+  "status": "Active",
+  "startDate": "2026-05-06",
+  "endDate": "2026-05-17",
+  "rulesOfEngagement": "Operate only against approved demo, staging, and documentation assets. No exploitation, phishing, persistence, destructive testing, or credential validation outside approved test accounts.",
+  "objectives": [
+    "Document exposed application surface and business-critical routes.",
+    "Track findings with evidence metadata suitable for client review.",
+    "Map assessment activity to manually selected MITRE ATT&CK techniques.",
+    "Maintain OPSEC and data-handling notes throughout the engagement."
+  ],
+  "targets": [
+    {
+      "id": "target-web-portal",
+      "name": "portal.northstar.example",
+      "type": "Web App",
+      "owner": "Product Security",
+      "priority": "Critical",
+      "inScope": true,
+      "notes": "Primary customer portal. Testing limited to approved staging tenant."
+    },
+    {
+      "id": "target-api-gateway",
+      "name": "api.northstar.example/v1",
+      "type": "API",
+      "owner": "Platform Engineering",
+      "priority": "High",
+      "inScope": true,
+      "notes": "Manual review and request metadata capture only."
+    },
+    {
+      "id": "target-prod-payments",
+      "name": "payments.northstar.example",
+      "type": "Web App",
+      "owner": "Payments",
+      "priority": "Critical",
+      "inScope": false,
+      "notes": "Explicitly excluded from active testing."
+    }
+  ],
+  "tasks": [
+    {
+      "id": "task-kickoff",
+      "title": "Confirm authorization packet and emergency contacts",
+      "status": "Done",
+      "owner": "Lead Operator",
+      "dueDate": "2026-05-06"
+    },
+    {
+      "id": "task-map-scope",
+      "title": "Map approved targets and business workflows",
+      "status": "In Progress",
+      "owner": "Assessment Team",
+      "dueDate": "2026-05-08"
+    },
+    {
+      "id": "task-report",
+      "title": "Prepare executive-ready engagement summary",
+      "status": "Backlog",
+      "owner": "Reporting",
+      "dueDate": "2026-05-16"
+    }
+  ],
+  "findings": [
+    {
+      "id": "finding-security-headers",
+      "title": "Missing defensive headers on staging portal",
+      "severity": "Medium",
+      "targetId": "target-web-portal",
+      "status": "Validated",
+      "mitreIds": ["T1595"],
+      "summary": "Manual review identified missing browser security headers on the approved staging portal response.",
+      "recommendation": "Add a centrally managed header policy for staging and production parity, then verify through release checks."
+    },
+    {
+      "id": "finding-logging-gaps",
+      "title": "API request correlation gaps",
+      "severity": "Low",
+      "targetId": "target-api-gateway",
+      "status": "Ready for Report",
+      "mitreIds": ["T1087"],
+      "summary": "Approved API test traffic did not consistently include correlation IDs in downstream application logs.",
+      "recommendation": "Standardize request ID propagation across gateway, application, and SIEM pipelines."
+    }
+  ],
+  "evidence": [
+    {
+      "id": "evidence-header-metadata",
+      "label": "Response header review metadata",
+      "type": "Request Metadata",
+      "linkedFindingId": "finding-security-headers",
+      "timestamp": "2026-05-06T18:20:00Z",
+      "source": "Approved staging tenant",
+      "notes": "Contains only route, timestamp, response code, and header names. No secrets captured."
+    },
+    {
+      "id": "evidence-log-correlation",
+      "label": "SIEM correlation review note",
+      "type": "Meeting Note",
+      "linkedFindingId": "finding-logging-gaps",
+      "timestamp": "2026-05-06T19:10:00Z",
+      "source": "Blue-team sync",
+      "notes": "Detection owner confirmed missing request ID on two sampled events."
+    }
+  ],
+  "attackChain": [
+    {
+      "id": "chain-scope-map",
+      "phase": "Recon",
+      "title": "Mapped approved application surface",
+      "timestamp": "2026-05-06T17:45:00Z",
+      "targetId": "target-web-portal",
+      "mitreIds": ["T1595", "T1592"],
+      "evidenceIds": ["evidence-header-metadata"],
+      "operatorNote": "Performed documentation-driven route inventory and passive response review within written scope."
+    },
+    {
+      "id": "chain-detection-review",
+      "phase": "Reporting",
+      "title": "Validated defender-visible signals",
+      "timestamp": "2026-05-06T19:15:00Z",
+      "targetId": "target-api-gateway",
+      "mitreIds": ["T1087"],
+      "evidenceIds": ["evidence-log-correlation"],
+      "operatorNote": "Mapped observed logging behavior to report notes for detection engineering follow-up."
+    }
+  ],
+  "opsecNotes": [
+    {
+      "id": "opsec-auth",
+      "category": "Authorization",
+      "note": "Rules of engagement and excluded production assets confirmed before any assessment activity.",
+      "owner": "Lead Operator",
+      "reviewed": true
+    },
+    {
+      "id": "opsec-data",
+      "category": "Data Handling",
+      "note": "Evidence records store metadata only. No credentials, tokens, or customer data are copied into CapySuite.",
+      "owner": "Reporting",
+      "reviewed": true
+    },
+    {
+      "id": "opsec-detection",
+      "category": "Detection",
+      "note": "Blue-team correlation review scheduled before final report handoff.",
+      "owner": "Detection Liaison",
+      "reviewed": false
+    }
+  ],
+  "activityLog": [
+    {
+      "id": "activity-sample-created",
+      "timestamp": "2026-05-06T20:00:00Z",
+      "category": "engagement",
+      "message": "Sample engagement loaded with scope, findings, evidence, OPSEC notes, and ATT&CK mappings."
+    },
+    {
+      "id": "activity-sample-detection",
+      "timestamp": "2026-05-06T19:15:00Z",
+      "category": "timeline",
+      "message": "Validated defender-visible signals with the detection liaison."
+    },
+    {
+      "id": "activity-sample-evidence",
+      "timestamp": "2026-05-06T18:20:00Z",
+      "category": "evidence",
+      "message": "Recorded sanitized response metadata for the staging portal finding."
+    }
+  ],
+  "updatedAt": "2026-05-06T20:00:00Z"
+}
